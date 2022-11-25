@@ -4,10 +4,14 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-client = discord.Client()
+bot = discord.Bot()
 
-@client.event
+for filename in os.listdir('./cogs'):
+    if filename.endswith('.py'):
+        bot.load_extension(f'cogs.{filename[:-3]}')    
+
+@bot.event
 async def on_ready():
-    print(f"The bot is now ready : {client.user}")
-    
-client.run(os.getenv('BOT_KEY'))
+    print(f"The bot is now ready : {bot.user}")
+
+bot.run(os.getenv('BOT_KEY'))
