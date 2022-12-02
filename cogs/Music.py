@@ -13,6 +13,9 @@ class Music(discord.Cog):
     #region [Events listeners]
     @discord.Cog.listener()
     async def on_wavelink_track_end(self, player: wavelink.Player, track: wavelink.Track, reason):
+        # deletes the music that was played before
+        self.__musicQueue.pop(0)
+        
         bot_voiceClient = player.guild.voice_client;
         await self.__PlayMusic(bot_voiceClient)
     #endregion
@@ -57,7 +60,6 @@ class Music(discord.Cog):
             return
             
         await bot_voiceClient.play(self.__musicQueue[0])
-        self.__musicQueue.pop(0)
     
     def __MessageAddedToQueue(self) -> discord.Embed:
         message = discord.Embed(
