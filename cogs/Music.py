@@ -50,7 +50,7 @@ class Music(discord.Cog):
         Args:
             bot_voiceChannel (discord.VoiceClient): The bot voice client
         """
-        if self.__musicQueue.count == 0:
+        if len(self.__musicQueue) == 0:
             sleep(2)
             await bot_voiceChannel.disconnect()
             return
