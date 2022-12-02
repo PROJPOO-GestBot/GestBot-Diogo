@@ -49,7 +49,7 @@ class Music(discord.Cog):
     
     #region [Private methods]
     async def __PlayMusic(self, bot_voiceClient : discord.VoiceClient) -> None:
-        """This method is designed to play the musics in the music queue on discord
+        """This method is designed to play the musics in the music queue through the bot voice client
 
         Args:
             bot_voiceClient (discord.VoiceClient): The bot voice client
