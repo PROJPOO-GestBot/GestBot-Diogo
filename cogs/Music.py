@@ -18,7 +18,8 @@ class Music(discord.Cog):
     #endregion
     
     #region [Discord commands]
-    @discord.slash_command()
+    @discord.slash_command(description = "Command that plays the music you want from YouTube")
+    @discord.option("search", description = "YouTube link or music name")
     async def play(self, ctx, *, search: str):
         author_voiceChannel = ctx.author.voice
         bot_voiceChannel = ctx.voice_client
