@@ -38,7 +38,7 @@ class Music(discord.Cog):
         song = await wavelink.YouTubeTrack.search(search, return_first=True)
         self.__musicQueue.append(song)
         
-        await ctx.respond("La musique a été ajoutée à la liste d'attente !")
+        await ctx.respond(embed=self.__MessageAddedToQueue())
         
         if not bot_voiceClient.is_playing():
             await self.__PlayMusic(bot_voiceClient)
@@ -58,6 +58,15 @@ class Music(discord.Cog):
             
         await bot_voiceClient.play(self.__musicQueue[0])
         self.__musicQueue.pop(0)
+    
+    def __MessageAddedToQueue(self) -> discord.Embed:
+        message = discord.Embed(
+            title="Liste d'attente",
+            description=f"Votre musique à bien été ajoutée à la liste d'attente. Position : {len(self.__musicQueue)-1}",
+            colour=0xffffff
+        )
+        
+        return message
     #endregion
     
 def setup(bot):
