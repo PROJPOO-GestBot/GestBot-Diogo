@@ -16,9 +16,9 @@ async def lavalink_nodes_connect():
     
     await wavelink.NodePool.create_node(
         bot=bot,
-        host='127.0.0.1',
-        port=2333,
-        password='Pa$$w0rd'
+        host=os.getenv("LAVALINK_IP"),
+        port=os.getenv("LAVALINK_PORT"),
+        password=os.getenv("LAVALINK_PASSWORD")
     ) # create the node
 
 @bot.event
