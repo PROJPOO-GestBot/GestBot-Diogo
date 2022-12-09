@@ -26,4 +26,4 @@ async def on_ready():
     await lavalink_nodes_connect()
     print(f"The bot is now ready : {bot.user}")
 
-bot.run(os.getenv('BOT_KEY'))
+bot.run(os.getenv('BOT_TOKEN'))
