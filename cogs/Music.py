@@ -24,6 +24,8 @@ class Music(discord.Cog):
     @discord.slash_command(description = "Commande qui permet de faire jouer au bot la musique que l'on souhaite")
     @discord.option("search", description = "Nom de la musique")
     async def play(self, ctx, *, search: str):
+        await ctx.defer();
+        
         author_voiceClient = ctx.author.voice
         bot_voiceClient = ctx.voice_client
         
@@ -34,12 +36,17 @@ class Music(discord.Cog):
         if bot_voiceClient and bot_voiceClient.channel.id != author_voiceClient.channel.id:
             await ctx.respond("Vous ne pouvez pas mettre de musique si vous n'etes pas dans le meme salon vocal que le bot !")
             return
+        
+        try:
+            song = await wavelink.YouTubeTrack.search(search, return_first=True)
+        except Exception:
+            await ctx.respond("La musique que vous avez sugéré n'a pas été trouvée... Veuillez réssayer plus tard !")
+            return
+        else:
+            self.__musicQueue.append(song)
             
         if not bot_voiceClient:
             bot_voiceClient = await author_voiceClient.channel.connect(cls=wavelink.Player)
-        
-        song = await wavelink.YouTubeTrack.search(search, return_first=True)
-        self.__musicQueue.append(song)
         
         await ctx.respond(embed=self.__MessageAddedToQueue())
         
