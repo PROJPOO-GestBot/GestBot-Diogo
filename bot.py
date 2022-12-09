@@ -10,4 +10,4 @@ client = discord.Client()
 async def on_ready():
     print(f"The bot is now ready : {client.user}")
     
-client.run(os.getenv('BOT_KEY'))
+client.run(os.getenv('BOT_TOKEN'))
