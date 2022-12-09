@@ -24,6 +24,7 @@ class Music(discord.Cog):
     @discord.slash_command(description = "Commande qui permet de faire jouer au bot la musique que l'on souhaite")
     @discord.option("search", description = "Nom ou lien youtube de la musique")
     async def play(self, ctx, *, search: str):
+        # Let bot finish all he needs before send a response
         await ctx.defer();
         
         author_voiceClient = ctx.author.voice
