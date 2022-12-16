@@ -5,7 +5,7 @@ import wavelink
 
 class Music(discord.Cog):
     # region [Private Attributes]
-    __musicQueue = []
+    __music_queue = []
     # endregion
 
     def __init__(self, bot) -> None:
@@ -15,10 +15,10 @@ class Music(discord.Cog):
     @discord.Cog.listener()
     async def on_wavelink_track_end(self, player: wavelink.Player, track: wavelink.Track, reason):
         # deletes the music that was played before
-        self.__musicQueue.pop(0)
+        self.__music_queue.pop(0)
 
         bot_voice_client = player.guild.voice_client;
-        await self.__PlayMusic(bot_voice_client)
+        await self.__play_music(bot_voice_client)
     # endregion
 
     # region [Discord commands]
@@ -50,15 +50,15 @@ class Music(discord.Cog):
             await ctx.respond("La musique que vous avez sugérée n'a pas été trouvée... Veuillez réssayer plus tard !")
             return
         else:
-            self.__musicQueue.append(song)
+            self.__music_queue.append(song)
 
         if not bot_voice_client:
             bot_voice_client = await author_voice_client.channel.connect(cls=wavelink.Player)
 
-        await ctx.respond(embed=self.__MessageAddedToQueue())
+        await ctx.respond(embed=self.__message_added_to_queue())
 
         if not bot_voice_client.is_playing():
-            await self.__PlayMusic(bot_voice_client)
+            await self.__play_music(bot_voice_client)
 
     # endregion
 
@@ -69,18 +69,18 @@ class Music(discord.Cog):
         Args:
             bot_voice_client (discord.VoiceClient): The bot voice client
         """
-        if len(self.__musicQueue) == 0:
+        if len(self.__music_queue) == 0:
             sleep(2)
             await bot_voice_client.disconnect()
             return
 
-        await bot_voice_client.play(self.__musicQueue[0])
+        await bot_voice_client.play(self.__music_queue[0])
 
     def __message_added_to_queue(self) -> discord.Embed:
         message = discord.Embed(
             title="Liste d'attente",
             # TODO REVIEW Line too long (ide proposition)
-            description=f"Votre musique à bien été ajoutée à la liste d'attente. Position : {len(self.__musicQueue) - 1}",
+            description=f"Votre musique à bien été ajoutée à la liste d'attente. Position : {len(self.__music_queue) - 1}",
             colour=0xffffff
         )
         return message
