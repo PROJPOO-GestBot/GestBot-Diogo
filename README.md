@@ -24,9 +24,9 @@ This is a bot made for communities on Discord with some features like Music, Fun
 ```
 # Prerequisites
 
-Before starting the Bot, you'll need to modify/create some files, create a Bot on Discord Developer Portal and make a basic discord server to make it work and to use it.
+Before starting the Bot, you'll need to create a **.env** file, create a Bot on Discord Developer Portal and make a basic discord server to make it work and to use it.
 
-First, let's start with the files needed to be modified:
+First, let's start with the file needed to be created:
 - In the root folder of the discord bot, create a file named **.env** with the informations below (remember to replace where it says **COMPLETE_IT** with the real informations)
 ``` Env
 SQL_HOSTNAME = "localhost"
@@ -41,20 +41,6 @@ BOT_TOKEN = "COMPLETE_IT"
 LAVALINK_IP = "127.0.0.1"
 LAVALINK_PORT = 2333
 LAVALINK_PASSWORD = "COMPLETE_IT"
-```
-- In the root folder of your Lavalink server, modify the application.yml file:
-``` yml
-...
-address: 127.0.0.1
-...
-password: "LAVALINK_PASSWORD_DEFINED_BEFORE_IN_.ENV"
-sources:
-    youtube: true
-    bandcamp: false
-    soundcloud: false
-    twitch: false
-    vimeo: false
-...
 ```
 
 After this, let's create a basic Discord Server:
