@@ -22,31 +22,6 @@ This is a bot made for communities on Discord with some features like Music, Fun
 └── README.md
 
 ```
-# Installation
-
-If you want to make the bot work, you'll need some things.
-
-- For Linux users
-``` bash
-sudo apt install python3.10 openjdk-13-jre
-```
-
-- For Windows users
-    - [Download Python 3.10.9 (Latest version of Python 3.10)](https://www.python.org/ftp/python/3.10.9/python-3.10.9-amd64.exe)
-    - [Download JDK 13](https://download.java.net/java/GA/jdk13/5b8a42f3905b406298b72d750b6919f6/33/GPL/openjdk-13_windows-x64_bin.zip)
-        - Unzip the file, put the folder into **C:** and rename it **java**
-        - Add a new environment variable with **C:\java\bin**
-
-Now, not all things are installed but these ones are for both OS. Open a **CMD/Terminal** and copy/paste these commands below. This command will automatically install the required dependencies for this project.
-```bash
-python -m pip install requirements.txt
-```
-
-One last thing needs to be installed, the Lavalink Server:
-- Create a folder named LavalinkServer on your Discord Bot base folder
-- [Download the Lavalink.jar](https://github.com/freyacodes/Lavalink/releases/download/3.4/Lavalink.jar) file and put it into the folder created before
-- Create a file named **application.yml** in the folder and paste the content from the example file ([available on GitHub](https://github.com/freyacodes/Lavalink/blob/3.4/LavalinkServer/application.yml.example))
-
 # Prerequisites
 
 Before starting the Bot, you'll need to modify/create some files, create a Bot on Discord Developer Portal and make a basic discord server to make it work and to use it.
@@ -62,6 +37,7 @@ SQL_DB_NAME = "GestBot"
 
 BOT_TOKEN = "COMPLETE_IT"
 
+# Take the infos of a Lavalink server on https://lavalink.darrennathanael.com/SSL/lavalink-with-ssl/
 LAVALINK_IP = "127.0.0.1"
 LAVALINK_PORT = 2333
 LAVALINK_PASSWORD = "COMPLETE_IT"
@@ -87,16 +63,32 @@ After this, let's create a basic Discord Server:
 
 Let's now create the Bot on Discord Developer Portal and invite it on the Discord Server created before. For this, follow [this tutorial](https://docs.pycord.dev/en/stable/discord.html).
 
+# Installation
+
+If you want to make the bot work, you'll need some things.
+
+- For Linux users
+``` bash
+sudo apt install python3.10
+```
+
+- For Windows users
+    - [Download Python 3.10.9 (Latest version of Python 3.10)](https://www.python.org/ftp/python/3.10.9/python-3.10.9-amd64.exe)
+
+Now, not all things are installed but these ones are for both OS. Open a **CMD/Terminal** and copy/paste these commands below. This command will automatically install the required dependencies for this project.
+```bash
+python -m pip install requirements.txt
+```
+
 # Testing
 
 Actually, no tests are available, we are searching for a solution to test the code easily.
 
 # Launch the bot
 
-To launch the bot correctly, launch 2 **CMD/Terminal** in the root folder of the Bot and then, write these 2 commands, one in each **CMD/Terminal**:
+To launch the bot correctly, launch a **CMD/Terminal** in the root folder of the Bot and then, write the command below:
 ``` bash
 python bot.py
-java -jar LavalinkServer/Lavalink.jar
 ```
 
 # Contributing
@@ -108,4 +100,4 @@ Please make sure to update tests as appropriate.
 
 # License
 
-[GPLv3](https://github.com/PROJPOO-GestBot/GestBot-Diogo/blob/develop/LICENSE)
+[GPLv3](https://github.com/PROJPOO-GestBot/GestBot/blob/main/LICENSE)
