@@ -34,11 +34,11 @@ class Music(discord.Cog):
         bot_voice_client = ctx.voice_client
 
         if not author_voice_client:
-            await ctx.respond(self.__music_error_messages["play_user_not_in_a_voice_channel"])
+            await ctx.respond(self.__music_error_messages["user_not_in_a_voice_channel"])
             return
 
         if bot_voice_client and bot_voice_client.channel.id != author_voice_client.channel.id:
-            await ctx.respond(self.__music_error_messages["play_user_not_in_same_voice_channel_of_bot"])
+            await ctx.respond(self.__music_error_messages["user_not_in_same_voice_channel_of_bot"])
             return
         
         if search.startswith("http") or "www." in search:
@@ -71,11 +71,11 @@ class Music(discord.Cog):
         bot_voice_client = ctx.voice_client
 
         if not author_voice_client:
-            await ctx.respond(self.__music_error_messages["stop_user_not_in_a_voice_channel"])
+            await ctx.respond(self.__music_error_messages["user_not_in_a_voice_channel"])
             return
 
         if bot_voice_client and bot_voice_client.channel.id != author_voice_client.channel.id:
-            await ctx.respond(self.__music_error_messages["stop_user_not_in_same_voice_channel_of_bot"])
+            await ctx.respond(self.__music_error_messages["user_not_in_same_voice_channel_of_bot"])
             return
         
         sleep(2)
