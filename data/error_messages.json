@@ -1,0 +1,9 @@
+{
+    "music" : {
+        "user_not_in_a_voice_channel" : "Vous ne pouvez pas mettre de musique si vous n'êtes pas dans un salon vocal !",
+        "user_not_in_same_voice_channel_of_bot" : "Vous ne pouvez pas mettre de musique si vous n'êtes pas dans le meme salon vocal que le bot !",
+        "not_youtube_link" : "Le lien que vous avez fourni n'est pas un lien Youtube !",
+        "music_not_found" : "La musique que vous avez sugérée n'a pas été trouvée... Veuillez réssayer plus tard !",
+        "can_not_use_playlist" : "Les playlists ne sont actuellement pas implémentée et ne peuvent donc pas être utilisées..."
+    }
+}
