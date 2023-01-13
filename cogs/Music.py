@@ -29,17 +29,11 @@ class Music(discord.Cog):
     async def play(self, ctx, *, search: str):
         # Let bot finish all he needs before send a response
         await ctx.defer();
-
-        author_voice_client = ctx.author.voice
+        
+        if not await self.__user_voice_client_checks(ctx):
+            return
+        
         bot_voice_client = ctx.voice_client
-
-        if not author_voice_client:
-            await ctx.respond(self.__music_error_messages["user_not_in_a_voice_channel"])
-            return
-
-        if bot_voice_client and bot_voice_client.channel.id != author_voice_client.channel.id:
-            await ctx.respond(self.__music_error_messages["user_not_in_same_voice_channel_of_bot"])
-            return
         
         if search.startswith("http") or "www." in search:
             if not self.__link_check(search):
@@ -58,6 +52,7 @@ class Music(discord.Cog):
             self.__music_queue.append([song,ctx.channel.id])
 
         if not bot_voice_client:
+            author_voice_client = ctx.author.voice
             bot_voice_client = await author_voice_client.channel.connect(cls=wavelink.Player)
 
         await ctx.respond(embed=self.__message_added_to_queue())
@@ -67,16 +62,10 @@ class Music(discord.Cog):
 
     @discord.slash_command(description="Commande qui permet d'arrêter la musique. Cette commande fait également le bot quitter le salon.")
     async def stop(self, ctx):
-        author_voice_client = ctx.author.voice
+        if not await self.__user_voice_client_checks(ctx):
+            return
+        
         bot_voice_client = ctx.voice_client
-
-        if not author_voice_client:
-            await ctx.respond(self.__music_error_messages["user_not_in_a_voice_channel"])
-            return
-
-        if bot_voice_client and bot_voice_client.channel.id != author_voice_client.channel.id:
-            await ctx.respond(self.__music_error_messages["user_not_in_same_voice_channel_of_bot"])
-            return
         
         sleep(2)
         self.__music_queue.clear()
@@ -86,16 +75,10 @@ class Music(discord.Cog):
     
     @discord.slash_command(description="Commande qui permet de mettre en pause la musique.")
     async def pause(self, ctx):
-        author_voice_client = ctx.author.voice
+        if not await self.__user_voice_client_checks(ctx):
+            return
+        
         bot_voice_client = ctx.voice_client
-
-        if not author_voice_client:
-            await ctx.respond(self.__music_error_messages["user_not_in_a_voice_channel"])
-            return
-
-        if bot_voice_client and bot_voice_client.channel.id != author_voice_client.channel.id:
-            await ctx.respond(self.__music_error_messages["user_not_in_same_voice_channel_of_bot"])
-            return
         
         if bot_voice_client.is_paused():
             await bot_voice_client.resume()
@@ -136,6 +119,20 @@ class Music(discord.Cog):
                 return True
         
         return False
+    
+    async def __user_voice_client_checks(self, ctx : discord.ApplicationContext) -> bool:
+        author_voice_client = ctx.author.voice
+        bot_voice_client = ctx.voice_client
+
+        if not author_voice_client:
+            await ctx.respond(self.__music_error_messages["user_not_in_a_voice_channel"])
+            return False
+
+        if bot_voice_client and bot_voice_client.channel.id != author_voice_client.channel.id:
+            await ctx.respond(self.__music_error_messages["user_not_in_same_voice_channel_of_bot"])
+            return False
+        
+        return True
     
     def __message_added_to_queue(self) -> discord.Embed:
         message = discord.Embed(
