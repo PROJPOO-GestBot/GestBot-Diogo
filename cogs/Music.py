@@ -71,8 +71,9 @@ class Music(discord.Cog):
             await ctx.respond(self.__music_error_messages["bot_not_connected"])
             return
             
-        sleep(2)
         self.__music_queue.clear()
+        await bot_voice_client.stop()
+        sleep(2)
         await bot_voice_client.disconnect()
         
         await ctx.respond("A bientôt ! :wave:")
@@ -94,6 +95,20 @@ class Music(discord.Cog):
         else:
             await bot_voice_client.pause()
             await ctx.respond(f"La musique a été mise en pause par <@{ctx.author.id}> !")
+    
+    @discord.slash_command(description="Commande permettant de sauter la musique actuelle.")
+    async def skip(self, ctx):
+        if not await self.__user_voice_client_checks(ctx):
+            return
+        
+        bot_voice_client = ctx.voice_client
+        
+        if bot_voice_client == None:
+            await ctx.respond(self.__music_error_messages["bot_not_connected"])
+            return
+        
+        await ctx.respond("Je passe à la musique suivante :thumbsup:")
+        await bot_voice_client.stop()
     # endregion
 
     # region [Private methods]
