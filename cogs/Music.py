@@ -1,4 +1,5 @@
 import discord
+import json
 from time import sleep
 import wavelink
 
@@ -6,6 +7,7 @@ import wavelink
 class Music(discord.Cog):
     # region [Private Attributes]
     __music_queue = []
+    __music_error_messages = json.load(open("./data/error_messages.json"))["music"]
     # endregion
 
     def __init__(self, bot) -> None:
@@ -32,25 +34,28 @@ class Music(discord.Cog):
         bot_voice_client = ctx.voice_client
 
         if not author_voice_client:
-            # TODO REVIEW All message content should be loaded from outside the code (db, json file,....)
-            await ctx.respond("Vous ne pouvez pas mettre de musique si vous n'êtes pas dans un salon vocal !")
+            await ctx.respond(self.__music_error_messages["user_not_in_a_voice_channel"])
             return
 
         if bot_voice_client and bot_voice_client.channel.id != author_voice_client.channel.id:
-            await ctx.respond(
-                "Vous ne pouvez pas mettre de musique si vous n'êtes pas dans le meme salon vocal que le bot !")
+            await ctx.respond(self.__music_error_messages["user_not_in_same_voice_channel_of_bot"])
             return
-
+        
+        if search.startswith("http") or "www." in search:
+            if not self.__link_check(search):
+                await ctx.respond(self.__music_error_messages["not_youtube_link"])
+                return
+        
         try:
             song = await wavelink.YouTubeTrack.search(search, return_first=True)
-        except Exception:
-            # TODO Review Too Broad Exception (from IDE input)
-            # TODO Review Use more specific exception. Never use Exception directly (either another exception type,
-            #  or filter by message content)
-            await ctx.respond("La musique que vous avez sugérée n'a pas été trouvée... Veuillez réssayer plus tard !")
+        except TypeError:
+            await ctx.respond(self.__music_error_messages["can_not_use_playlist"])
+            return
+        except IndexError:
+            await ctx.respond(self.__music_error_messages["music_not_found"])
             return
         else:
-            self.__music_queue.append(song)
+            self.__music_queue.append([song,ctx.channel.id])
 
         if not bot_voice_client:
             bot_voice_client = await author_voice_client.channel.connect(cls=wavelink.Player)
@@ -73,19 +78,46 @@ class Music(discord.Cog):
             sleep(2)
             await bot_voice_client.disconnect()
             return
+        
+        await self.__bot.get_channel(self.__music_queue[0][1]).send(embed=self.__message_now_playing())
+        await bot_voice_client.play(self.__music_queue[0][0])
 
-        await bot_voice_client.play(self.__music_queue[0])
+    def __link_check(self, link : str) -> bool:
+        """This method is designed to check if the link passed in params is a Youtube link.
 
+        Args:
+            link (str): The link to check
+
+        Returns:
+            bool: True if the link is valid, False if not
+        """
+        valid_youtube_links = ["https://www.youtube.com/","https://youtu.be/", "www.youtube.com"]
+        
+        for valid_link in valid_youtube_links:
+            if valid_link in link:
+                return True
+        
+        return False
+    
     def __message_added_to_queue(self) -> discord.Embed:
         message = discord.Embed(
             title="Liste d'attente",
             # TODO REVIEW Line too long (ide proposition)
-            description=f"Votre musique à bien été ajoutée à la liste d'attente. Position : {len(self.__music_queue) - 1}",
+            description=f"Votre musique à été ajoutée à la liste d'attente. Position : {len(self.__music_queue) - 1}",
             colour=0xffffff
         )
         return message
+    
+    def __message_now_playing(self) -> discord.Embed:
+        message = discord.Embed(
+            title="Maintenant",
+            description=f"**{self.__music_queue[0][0].title}**",
+            url=self.__music_queue[0][0].uri,
+            colour=0xffffff
+        )
+        message.set_image(url = self.__music_queue[0][0].thumbnail)
+        return message
     # endregion
-
 
 def setup(bot):
     bot.add_cog(Music(bot))
