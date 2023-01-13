@@ -33,8 +33,6 @@ class Music(discord.Cog):
         if not await self.__user_voice_client_checks(ctx):
             return
         
-        bot_voice_client = ctx.voice_client
-        
         if search.startswith("http") or "www." in search:
             if not self.__link_check(search):
                 await ctx.respond(self.__music_error_messages["not_youtube_link"])
@@ -51,6 +49,8 @@ class Music(discord.Cog):
         else:
             self.__music_queue.append([song,ctx.channel.id])
 
+        bot_voice_client = ctx.voice_client
+        
         if not bot_voice_client:
             author_voice_client = ctx.author.voice
             bot_voice_client = await author_voice_client.channel.connect(cls=wavelink.Player)
@@ -67,6 +67,10 @@ class Music(discord.Cog):
         
         bot_voice_client = ctx.voice_client
         
+        if bot_voice_client == None:
+            await ctx.respond(self.__music_error_messages["bot_not_connected"])
+            return
+            
         sleep(2)
         self.__music_queue.clear()
         await bot_voice_client.disconnect()
@@ -79,6 +83,10 @@ class Music(discord.Cog):
             return
         
         bot_voice_client = ctx.voice_client
+        
+        if bot_voice_client == None:
+            await ctx.respond(self.__music_error_messages["bot_not_connected"])
+            return
         
         if bot_voice_client.is_paused():
             await bot_voice_client.resume()
