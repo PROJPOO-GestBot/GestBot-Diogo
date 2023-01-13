@@ -83,6 +83,26 @@ class Music(discord.Cog):
         await bot_voice_client.disconnect()
         
         await ctx.respond("A bientôt ! :wave:")
+    
+    @discord.slash_command(description="Commande qui permet de mettre en pause la musique.")
+    async def pause(self, ctx):
+        author_voice_client = ctx.author.voice
+        bot_voice_client = ctx.voice_client
+
+        if not author_voice_client:
+            await ctx.respond(self.__music_error_messages["user_not_in_a_voice_channel"])
+            return
+
+        if bot_voice_client and bot_voice_client.channel.id != author_voice_client.channel.id:
+            await ctx.respond(self.__music_error_messages["user_not_in_same_voice_channel_of_bot"])
+            return
+        
+        if bot_voice_client.is_paused():
+            await bot_voice_client.resume()
+            await ctx.respond(f"La lecutre a été reprise par <@{ctx.author.id}> !")
+        else:
+            await bot_voice_client.pause()
+            await ctx.respond(f"La musique a été mise en pause par <@{ctx.author.id}> !")
     # endregion
 
     # region [Private methods]
