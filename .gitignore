@@ -164,6 +164,7 @@ cython_debug/
 
 # Custom
 *.json
+!/data/*.json
 *.egg-info
 .venv/
 docs/_build
