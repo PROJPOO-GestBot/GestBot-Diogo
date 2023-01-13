@@ -34,11 +34,11 @@ class Music(discord.Cog):
         bot_voice_client = ctx.voice_client
 
         if not author_voice_client:
-            await ctx.respond(self.__music_error_messages["user_not_in_a_voice_channel"])
+            await ctx.respond(self.__music_error_messages["play_user_not_in_a_voice_channel"])
             return
 
         if bot_voice_client and bot_voice_client.channel.id != author_voice_client.channel.id:
-            await ctx.respond(self.__music_error_messages["user_not_in_same_voice_channel_of_bot"])
+            await ctx.respond(self.__music_error_messages["play_user_not_in_same_voice_channel_of_bot"])
             return
         
         if search.startswith("http") or "www." in search:
@@ -65,6 +65,24 @@ class Music(discord.Cog):
         if not bot_voice_client.is_playing():
             await self.__play_music(bot_voice_client)
 
+    @discord.slash_command(description="Commande qui permet d'arrêter la musique. Cette commande fait également le bot quitter le salon.")
+    async def stop(self, ctx):
+        author_voice_client = ctx.author.voice
+        bot_voice_client = ctx.voice_client
+
+        if not author_voice_client:
+            await ctx.respond(self.__music_error_messages["stop_user_not_in_a_voice_channel"])
+            return
+
+        if bot_voice_client and bot_voice_client.channel.id != author_voice_client.channel.id:
+            await ctx.respond(self.__music_error_messages["stop_user_not_in_same_voice_channel_of_bot"])
+            return
+        
+        sleep(2)
+        self.__music_queue.clear()
+        await bot_voice_client.disconnect()
+        
+        await ctx.respond("A bientôt ! :wave:")
     # endregion
 
     # region [Private methods]
