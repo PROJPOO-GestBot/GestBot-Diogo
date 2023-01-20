@@ -112,7 +112,7 @@ class Music(discord.Cog):
     
     @discord.slash_command(description="Commande qui permet de voir les prochaines musiques (max 6) présentes dans la liste d'attente.")
     async def queue(self, ctx):
-        if len(self.__music_queue) == 0:
+        if not len(self.__music_queue) > 1:
             await ctx.respond("La liste d'attente est actuellement vide !")
             return
         
