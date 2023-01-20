@@ -117,6 +117,16 @@ class Music(discord.Cog):
             return
         
         await ctx.respond(embed=self.__message_musics_in_queue())
+        
+    @discord.slash_command(description="Commande qui permet de voir quel musique est actuellement jouée.")
+    async def now(self, ctx):
+        bot_voice_client = ctx.voice_client
+        
+        if not bot_voice_client.is_playing():
+            await ctx.respond("Aucune musique est actuellement jouée.")
+            return
+        
+        await ctx.respond(embed=self.__message_now_playing())
     # endregion
 
     # region [Private methods]
