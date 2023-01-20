@@ -1,7 +1,7 @@
 import discord
 import random
 
-class FunGames(discord.Cog):
+class FunCommands(discord.Cog):
     def __init__(self, bot) -> None:
         self.__bot = bot
         
@@ -41,4 +41,4 @@ class FunGames(discord.Cog):
         await ctx.respond(message)
         
 def setup(bot):
-    bot.add_cog(FunGames(bot))
+    bot.add_cog(FunCommands(bot))
