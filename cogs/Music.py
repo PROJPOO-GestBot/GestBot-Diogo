@@ -109,6 +109,14 @@ class Music(discord.Cog):
         
         await ctx.respond("Je passe à la musique suivante :thumbsup:")
         await bot_voice_client.stop()
+    
+    @discord.slash_command(description="Commande qui permet de voir les prochaines musiques (max 6) présentes dans la liste d'attente.")
+    async def queue(self, ctx):
+        if len(self.__music_queue) == 0:
+            await ctx.respond("La liste d'attente est actuellement vide !")
+            return
+        
+        await ctx.respond(embed=self.__message_musics_in_queue())
     # endregion
 
     # region [Private methods]
@@ -144,6 +152,15 @@ class Music(discord.Cog):
         return False
     
     async def __user_voice_client_checks(self, ctx : discord.ApplicationContext) -> bool:
+        """This method is designed to check the current state of the user voice client.
+
+        Args:
+            ctx (discord.ApplicationContext): The actual context
+
+        Returns:
+            bool: True if user respects all conditions, false if one of them isn't respected
+        """
+        
         author_voice_client = ctx.author.voice
         bot_voice_client = ctx.voice_client
 
@@ -174,6 +191,23 @@ class Music(discord.Cog):
             colour=0xffffff
         )
         message.set_image(url = self.__music_queue[0][0].thumbnail)
+        return message
+    
+    def __message_musics_in_queue(self) -> discord.Embed:
+        message = discord.Embed(
+            title="Liste d'attente",
+            colour=0xffffff
+        )
+        
+        for idx, music in enumerate(self.__music_queue[1:], start=1):
+            if idx > 6:
+                break
+            
+            message.add_field(
+                name=f"{idx}:",
+                value=f"[{music[0].title}]({music[0].uri})",
+            )
+        
         return message
     # endregion
 
