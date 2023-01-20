@@ -30,7 +30,7 @@ class Music(discord.Cog):
         # Let bot finish all he needs before send a response
         await ctx.defer();
         
-        if not await self.__user_voice_client_checks(ctx):
+        if not await self.__user_voice_client_state_checks(ctx):
             return
         
         if search.startswith("http") or "www." in search:
@@ -62,7 +62,7 @@ class Music(discord.Cog):
 
     @discord.slash_command(description="Commande qui permet d'arrêter la musique. Cette commande fait également le bot quitter le salon.")
     async def stop(self, ctx : discord.ApplicationContext):
-        if not await self.__user_voice_client_checks(ctx):
+        if not await self.__user_voice_client_state_checks(ctx):
             return
         
         bot_voice_client = ctx.voice_client
@@ -80,7 +80,7 @@ class Music(discord.Cog):
     
     @discord.slash_command(description="Commande qui permet de mettre en pause la musique.")
     async def pause(self, ctx : discord.ApplicationContext):
-        if not await self.__user_voice_client_checks(ctx):
+        if not await self.__user_voice_client_state_checks(ctx):
             return
         
         bot_voice_client = ctx.voice_client
@@ -98,7 +98,7 @@ class Music(discord.Cog):
     
     @discord.slash_command(description="Commande permettant de sauter la musique actuelle.")
     async def skip(self, ctx : discord.ApplicationContext):
-        if not await self.__user_voice_client_checks(ctx):
+        if not await self.__user_voice_client_state_checks(ctx):
             return
         
         bot_voice_client = ctx.voice_client
@@ -161,7 +161,7 @@ class Music(discord.Cog):
         
         return False
     
-    async def __user_voice_client_checks(self, ctx : discord.ApplicationContext) -> bool:
+    async def __user_voice_client_state_checks(self, ctx : discord.ApplicationContext) -> bool:
         """This method is designed to check the current state of the user voice client.
 
         Args:
