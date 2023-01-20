@@ -2,6 +2,7 @@ import os
 import discord
 import random
 from blagues_api import BlaguesAPI
+from newsapi import NewsApiClient
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -56,5 +57,29 @@ class FunCommands(discord.Cog):
         
         await ctx.respond(f"{blague_infos[0]}\n\n\n\n{blague_infos[1]}")
         
+    @discord.slash_command(description="Commande qui permet de récupérer les top actualités d'un jour d'un pays.")
+    @discord.option(name="category",choices=["Business", "Entertainment", "General", "Health", "Science", "Sports", "Technology"])
+    async def news(self, ctx : discord.ApplicationContext, category : str):
+        news_api = NewsApiClient(api_key=os.getenv("NEWS_API_KEY"))
+        
+        news_list = news_api.get_top_headlines(
+            language="fr",
+            category=category.lower()
+        )
+        
+        news = random.choice(news_list["articles"])
+        
+        message = discord.Embed(
+            title=news["title"],
+            description=news["description"],
+            url=news["url"],
+            color=0xffffff
+        )
+        
+        if news["urlToImage"]:
+            message.set_image(url=news["urlToImage"])
+            
+        await ctx.respond(embed=message)
+    
 def setup(bot):
     bot.add_cog(FunCommands(bot))
