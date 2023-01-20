@@ -1,5 +1,10 @@
+import os
 import discord
 import random
+from blagues_api import BlaguesAPI
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class FunCommands(discord.Cog):
     def __init__(self, bot) -> None:
@@ -39,6 +44,17 @@ class FunCommands(discord.Cog):
         else: message += f"Le gagnant est <@{winner_id}> :trophy: !"
         
         await ctx.respond(message)
+        
+    @discord.slash_command(description="Le bot fait une blague")
+    @discord.option(name="type",choices=["Global", "Dev", "Dark", "Limit", "Beauf", "Blondes"])
+    async def joke(self, ctx : discord.ApplicationContext, type : str):
+        blagues = BlaguesAPI(os.getenv("BLAGUES_API_KEY"))
+        
+        blague = await blagues.random_categorized(type.lower())
+        
+        blague_infos = [blague.joke, blague.answer]
+        
+        await ctx.respond(f"{blague_infos[0]}\n\n\n\n{blague_infos[1]}")
         
 def setup(bot):
     bot.add_cog(FunCommands(bot))
