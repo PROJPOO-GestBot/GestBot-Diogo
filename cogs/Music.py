@@ -26,7 +26,7 @@ class Music(discord.Cog):
     # region [Discord commands]
     @discord.slash_command(description="Commande qui permet de faire jouer au bot la musique que l'on souhaite")
     @discord.option("search", description="Nom ou lien youtube de la musique")
-    async def play(self, ctx, *, search: str):
+    async def play(self, ctx : discord.ApplicationContext, *, search: str):
         # Let bot finish all he needs before send a response
         await ctx.defer();
         
@@ -61,7 +61,7 @@ class Music(discord.Cog):
             await self.__play_music(bot_voice_client)
 
     @discord.slash_command(description="Commande qui permet d'arrêter la musique. Cette commande fait également le bot quitter le salon.")
-    async def stop(self, ctx):
+    async def stop(self, ctx : discord.ApplicationContext):
         if not await self.__user_voice_client_checks(ctx):
             return
         
@@ -79,7 +79,7 @@ class Music(discord.Cog):
         await ctx.respond("A bientôt ! :wave:")
     
     @discord.slash_command(description="Commande qui permet de mettre en pause la musique.")
-    async def pause(self, ctx):
+    async def pause(self, ctx : discord.ApplicationContext):
         if not await self.__user_voice_client_checks(ctx):
             return
         
@@ -97,7 +97,7 @@ class Music(discord.Cog):
             await ctx.respond(f"La musique a été mise en pause par <@{ctx.author.id}> !")
     
     @discord.slash_command(description="Commande permettant de sauter la musique actuelle.")
-    async def skip(self, ctx):
+    async def skip(self, ctx : discord.ApplicationContext):
         if not await self.__user_voice_client_checks(ctx):
             return
         
@@ -111,7 +111,7 @@ class Music(discord.Cog):
         await bot_voice_client.stop()
     
     @discord.slash_command(description="Commande qui permet de voir les prochaines musiques (max 6) présentes dans la liste d'attente.")
-    async def queue(self, ctx):
+    async def queue(self, ctx : discord.ApplicationContext):
         if not len(self.__music_queue) > 1:
             await ctx.respond("La liste d'attente est actuellement vide !")
             return
@@ -119,7 +119,7 @@ class Music(discord.Cog):
         await ctx.respond(embed=self.__message_musics_in_queue())
         
     @discord.slash_command(description="Commande qui permet de voir quel musique est actuellement jouée.")
-    async def now(self, ctx):
+    async def now(self, ctx : discord.ApplicationContext):
         bot_voice_client = ctx.voice_client
         
         if not bot_voice_client.is_playing():
