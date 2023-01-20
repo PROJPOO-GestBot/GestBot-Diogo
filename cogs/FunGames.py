@@ -12,29 +12,33 @@ class FunGames(discord.Cog):
         possibilities_emojis = [":rock:", ":page_facing_up:", ":scissors:"]
         random_choice = random.choice(possibilities)
         
-        message = f"{possibilities_emojis[possibilities.index(random_choice)]} (<@{ctx.bot.user.id}>) X {possibilities_emojis[possibilities.index(choice)]} (<@{ctx.author.id}>)\n\n"
-        winner_message = ""
-        
         if choice == random_choice:
-            winner_message += "Egalité !"   
+            winner_id = -1
         elif random_choice == possibilities[0]:
             if choice == possibilities[2]:
-                winner_message = f"Le gagnant est <@{ctx.bot.user.id}> :trophy: !"
+                winner_id = ctx.bot.user.id
             else:
-                winner_message = f"Le gagnant est <@{ctx.author.id}> :trophy: !"
+                winner_id = ctx.author.id
         elif random_choice == possibilities[1]:
             if choice == possibilities[0]:
-                winner_message = f"Le gagnant est <@{ctx.bot.user.id}> :trophy: !"
+                winner_id = ctx.bot.user.id
             else:
-                winner_message = f"Le gagnant est <@{ctx.author.id}> :trophy: !"
+                winner_id = ctx.author.id
         elif random_choice == possibilities[2]:
             if choice == possibilities[1]:
-                winner_message = f"Le gagnant est <@{ctx.bot.user.id}> :trophy: !"
+                winner_id = ctx.bot.user.id
             else:
-                winner_message = f"Le gagnant est <@{ctx.author.id}> :trophy: !"
+                winner_id = ctx.author.id
             
-        await ctx.respond(message+winner_message)
+        bot_choice_emoji = possibilities_emojis[possibilities.index(random_choice)]
+        user_choice_emoji = possibilities_emojis[possibilities.index(choice)]
+        
+        message = f"{bot_choice_emoji} (<@{ctx.bot.user.id}>) X {user_choice_emoji} (<@{ctx.author.id}>)\n\n"
+        
+        if winner_id == -1: message += "Egalité !"
+        else: message += f"Le gagnant est <@{winner_id}> :trophy: !"
+        
+        await ctx.respond(message)
+        
 def setup(bot):
     bot.add_cog(FunGames(bot))
-
-            
