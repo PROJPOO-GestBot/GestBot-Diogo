@@ -1,5 +1,5 @@
 blagues_api==1.0.1
-discord.py==2.1.0
+py-cord[voice]==2.3.2
 newsapi==0.1.1
 newsapi_python==0.2.6
 python-dotenv==0.21.1
