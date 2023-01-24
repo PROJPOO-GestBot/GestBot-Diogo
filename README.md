@@ -8,16 +8,17 @@ This is a bot made for communities on Discord with some features like Music, Fun
 
 ```
 .
-├── cogs                # Collection of commands
-│   └── Music.py
-├── data                # All things that's not code
+├── cogs                      # Collection of commands
+├── data                      # All things that's not code
+│   ├── error_messages.json
+│   ├── databases
 │   ├── font
 │   └── img
-├── docs                # Folder with the documentation
-├── libs                # Personnal librairies
-├── tests               # Folder containing automated tests
-├── bot.py              # Bot base file, used to start the bot
-├── requirements.txt    # File containing all required dependencies.
+├── docs                      # Folder with the documentation
+├── libs                      # Personnal librairies
+├── tests                     # Folder containing automated tests
+├── bot.py                    # Bot base file, used to start the bot
+├── requirements.txt          # File containing all required dependencies.
 ├── LICENSE
 └── README.md
 
@@ -41,6 +42,12 @@ BOT_TOKEN = "COMPLETE_IT"
 LAVALINK_IP = "127.0.0.1"
 LAVALINK_PORT = 2333
 LAVALINK_PASSWORD = "COMPLETE_IT"
+
+# https://www.blagues-api.fr/
+BLAGUES_API_KEY = "COMPLETE_IT"
+
+# https://newsapi.org/
+NEWS_API_KEY = "COMPLETE_IT"
 ```
 
 After this, let's create a basic Discord Server:
